@@ -42,5 +42,16 @@ CHIP ALU {
         ng; // 1 if (out < 0),  0 otherwise
 
     PARTS:
-   // Put you code here:
+    Mux16(a[0..15]=x[0..15],b[0..15]=false,sel=zx,out[0..15]=outX1[0..15]);
+    Not16(in[0..15]=outX1[0..15],out[16]=notX[0..15]);
+    Mux16(a[0..15]=outX1[0..15],b[0..15]=notX[0..15],sel=nx,out[0..15]=outX2[0..15]);
+    Mux16(a[0..15]=y[0..15],b[0..15]=false,sel=zy,out[0..15]=outY1[0..15]);
+    Not16(in[0..15]=outY1[0..15],out[16]=notY[0..15]);
+    Mux16(a[0..15]=outY1[0..15],b[0..15]=notY[0..15],sel=ny,out[0..15]=outY2[0..15]);
+    And16(a[0..15]=outX2[0..15],b[0..15]=outY2[0..15],out[0..15]=andXY[0..15]);
+    Add16(a[0..15]=outX2[0..15],b[0..15]=outY2[0..15],out[0..15]=addXY[0..15]);
+    Mux16(a[0..15]=andXY[0..15],b[0..15]=addXY[0..15],sel=f,out[0..15]=fXY[0..15]);
+    Not16(in[0..15]=fXY[0..15],out[16]=notfXY[0..15]);
+    Mux16(a[0..15]=fXY[0..15],b[0..15]=notfXY[0..15],sel=no,out[0..15]=out[0..15]);
+    
 }
